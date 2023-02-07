@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -145,8 +147,8 @@ public class Outline {
     List<String> words = getList();
     System.out.println("7:");
     System.out.println(words.stream()
-      .map((String s) -> s.toUpperCase())
-      .reduce("", (String acc, String elem) -> acc + elem));
+        .map((String s) -> s.toUpperCase())
+        .reduce("", (String acc, String elem) -> acc + elem));
   }
 
   // (*) Produce a single String that is the result of concatenating the
@@ -181,14 +183,91 @@ public class Outline {
   // Count the number of dishes in a stream using the map and reduce methods.
   public static void question11() {
     List<Dish> menu = Dish.getMenu();
-    System.out.println("10:");
+    System.out.println("11:");
     System.out.println(menu.stream()
-      .map((Dish d) -> 1)
-      .reduce(0, (Integer acc, Integer elem) -> acc + elem));
+        .map((Dish d) -> 1)
+        .reduce(0, (Integer acc, Integer elem) -> acc + elem));
 
   }
 
-  // CONTINUE WITH THE REST OF THE QUESTIONS
+  // Given a list of numbers, print out the list of the squares
+  // of each number. For example, given `[1, 2, 3, 4, 5]` you should print `[1, 4,
+  // 9, 16, 25]`.
+  public static void question12() {
+    System.out.println("12:");
+    List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+    System.out.println(numbers.stream().map((Integer x) -> x * x).toList());
+  }
+
+  // Given two lists of numbers, print out all pairs of numbers. For example,
+  // given a list `[1, 2, 3]` and a list `[3, 4]` you should print:
+  // `[[1, 3], [1, 4], [2, 3], [2, 4], [3, 3], [3, 4]]`.
+  // For simplicity, you can represent each *pair* as a list with two elements.
+  public static void question13() {
+    System.out.println("13:");
+    List<Integer> numbers = Arrays.asList(1, 2, 3);
+    List<Integer> otherNumbers = Arrays.asList(3, 4);
+
+    List<Integer[]> cartesian = numbers.stream()
+        .flatMap(e1 -> otherNumbers.stream().map(e2 -> (new Integer[] { e1, e2 }))).toList();
+
+    for (int i = 0; i < cartesian.size(); i++) {
+      Integer[] elem = cartesian.get(i);
+      System.out.println(elem[0] + " " + elem[1]);
+    }
+  }
+
+  // Extend the previous example to return only pairs whose
+  // sum is divisible by `3`. For example, `[2, 4]` and `[3, 3]` are valid
+  public static void question14() {
+    System.out.println("14:");
+    List<Integer> numbers = Arrays.asList(1, 2, 3);
+    List<Integer> otherNumbers = Arrays.asList(3, 4);
+
+    List<Integer[]> cartesian = numbers.stream()
+        .flatMap(e1 -> otherNumbers.stream().map(e2 -> (new Integer[] { e1, e2 }))).filter((elems) -> 
+          (elems[0] + elems[1]) % 3 == 0
+        ).toList();
+
+    for (int i = 0; i < cartesian.size(); i++) {
+      Integer[] elem = cartesian.get(i);
+      System.out.println(elem[0] + " " + elem[1]);
+    }
+  }
+
+
+  // Provide three ways to use streams to compute the sum of a list of
+  // numbers.
+
+  // First way:
+
+  public static void question15() {
+    System.out.println("15:");
+    List<Integer> numbers = Arrays.asList(1, 5, 7, 9, 16);
+    System.out.println(numbers.stream()
+    .reduce(0, (acc, elem) -> acc + elem)); // Co tutaj jest nie tak?
+
+  }
+
+  // Second way:
+
+  public static void question15b() {
+    System.out.println("15b:");
+    List<Integer> integers = Arrays.asList(1, 5, 7, 9, 16);
+    System.out.println(integers.stream()
+        .collect(Collectors.summingInt(Integer::intValue))); // To tez nie dziala
+  }
+
+  // Third way:
+
+  public static void question15c() {
+    System.out.println("15c:");
+    List<Integer> num = Arrays.asList(1, 5, 7, 9, 16);
+    System.out.println(num.stream()
+        .mapToInt(Integer::intValue)
+        .sum());
+
+  }
 
   public static void main(String... args) { // varargs alternative to String[]
     question1();
@@ -202,5 +281,11 @@ public class Outline {
     question9();
     question10();
     question11();
+    question12();
+    question13();
+    question14();
+    question15();
+    question15b();
+    question15c();
   }
 }
